@@ -1,21 +1,21 @@
 {
-  "name": "jsx-reader",
+  "name": "msx-reader",
   "description": "reader",
-  "version": "0.1.1",
-  "author": "James Long <longster@gmail.com>",
+  "version": "0.0.1",
+  "author": "Stephen Demjanenko <sdemjanenko@gmail.com>",
   "engines": {
     "node": "*"
   },
   "main": "index",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jlongster/jsx-reader.git"
+    "url": "https://github.com/sdemjanenko/msx-reader.git"
   },
   "license": [{
     "type": "BSD",
-    "url": "https://github.com/jlongster/jsx-reader/blob/master/LICENSE"
+    "url": "https://github.com/sdemjanenko/msx-reader/blob/master/LICENSE"
   }],
   "bugs": {
-    "url": "https://github.com/jlongster/jsx-reader/issues"
+    "url": "https://github.com/sdemjanenko/msx-reader/issues"
   }
 }

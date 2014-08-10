@@ -1,9 +1,9 @@
 
-# jsx-reader
+# msx-reader
 
-A reader to hook in JSX syntax to JavaScript, using
+A reader to hook in MSX syntax to JavaScript, using
 [sweet.js](http://sweetjs.org/). Why? Because now you can use any
-other language extensions (macros) with JSX. All you have to do is
+other language extensions (macros) with MSX. All you have to do is
 integrate sweet.js in your pipeline and you can have everything,
 including *working* sourcemaps and nice errors across all things.
 
@@ -18,7 +18,7 @@ fixed. That said, it should be relatively stable.
 ```
 
 ```
-React.DOM.div(null, 'Monkeys:', listOfMonkeys, ' ', scratchesAss);
+m('div', null, ['Monkeys:', listOfMonkeys, ' ', scratchesAss]);
 ```
 
 Or
@@ -31,11 +31,11 @@ Or
 ```
 
 ```
-SyntaxError: [JSX] Expected correspoding closing tag for p
+SyntaxError: [MSX] Expected correspoding closing tag for p
 5: </div>
      ^
-    at Object.readtables.parserAccessor.throwSyntaxError (/Users/james/projects/jsx-
-reader/node_modules/sweet.js/lib/parser.js:4947:23)                                
-    at Object.JSXReader.readElement (/Users/james/projects/jsx-reader/jsx-reader.js:
-223:21)                                                                            
+    at Object.readtables.parserAccessor.throwSyntaxError (/Users/sdemjanenko/Code/msx-
+reader/node_modules/sweet.js/lib/parser.js:4947:23)
+    at Object.MSXReader.readElement (/Users/sdemjanenko/Code/msx-reader/msx-reader.js:
+223:21)
 ```

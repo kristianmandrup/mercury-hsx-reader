@@ -2,13 +2,13 @@
 // TODO: https://github.com/facebook/react/commit/e6134c307e2bb7765aaa747eb5d2136fc18abbd7
 
 var sweet = require('sweet.js');
-var helperMacro = sweet.loadNodeModule(__dirname, './macros/jsx-macro.js');
+var helperMacro = sweet.loadNodeModule(__dirname, './macros/msx-macro.js');
 
 sweet.loadMacro(__dirname + '/macros/display-name.js');
 
 // Error handling
 
-function JSXBailError(message) {
+function MSXBailError(message) {
   this.message = message;
 }
 
@@ -38,7 +38,7 @@ TokenBuffer.prototype = {
   length: function() {
     return this.buffer.length;
   },
-  
+
   reset: function() {
     this.buffer = [];
   },
@@ -46,7 +46,7 @@ TokenBuffer.prototype = {
   expect: function(ch) {
     var reader = this.reader;
     if(reader.index >= reader.length) {
-      throw new JSXBailError('bailed since end of file found');
+      throw new MSXBailError('bailed since end of file found');
     }
 
     var punc = reader.getQueued();
@@ -114,12 +114,12 @@ TokenBuffer.prototype = {
   }
 };
 
-function JSXReader(reader) {
+function MSXReader(reader) {
   this.reader = reader;
   this.buffer = new TokenBuffer(reader);
 }
 
-JSXReader.prototype = {
+MSXReader.prototype = {
   expect: function() {
     return this.buffer.expect.apply(this.buffer, arguments);
   },
@@ -139,7 +139,7 @@ JSXReader.prototype = {
       }.bind(this));
     }
     catch(e) {
-      if(!(e instanceof JSXBailError)) {
+      if(!(e instanceof MSXBailError)) {
         throw e;
       }
       this.buffer.reset();
@@ -173,12 +173,12 @@ JSXReader.prototype = {
         .reduce(tokReduce, '');
 
     // Prefix the name with React.DOM if necessary
-    if(JSXTAGS[openingName]) {
-      openingNameToks.unshift(reader.makePunctuator('.'));
-      openingNameToks.unshift(reader.makeIdentifier('DOM'));
-      openingNameToks.unshift(reader.makePunctuator('.'));
-      openingNameToks.unshift(reader.makeIdentifier('React'));
-    }
+    // if(JSXTAGS[openingName]) {
+    //   openingNameToks.unshift(reader.makePunctuator('.'));
+    //   openingNameToks.unshift(reader.makeIdentifier('DOM'));
+    //   openingNameToks.unshift(reader.makePunctuator('.'));
+    //   openingNameToks.unshift(reader.makeIdentifier('React'));
+    // }
 
     this.buffer.add(openingNameToks);
 
@@ -203,7 +203,7 @@ JSXReader.prototype = {
 
       if(openingName !== closingName) {
         this.reader.throwSyntaxError(
-          'JSX',
+          'MSX',
           'Expected corresponding closing tag for ' + openingName,
           closingNameToks[0]
         )
@@ -232,7 +232,7 @@ JSXReader.prototype = {
         this.readAttribute();
         end = this.match('/') || this.match('>');
         if(!end) {
-            this.buffer.add(reader.makePunctuator(','));
+            this.buffer.add(reader.makePunctuator(',')); // TODO
         }
       }
     }.bind(this));
@@ -259,7 +259,7 @@ JSXReader.prototype = {
     this.expect('<');
 
     if(reader.suppressReadError(reader.readRegExp)) {
-      throw new JSXBailError('bailed because regexp found ' +
+      throw new MSXBailError('bailed because regexp found ' +
                              'at closing element');
     }
 
@@ -360,7 +360,7 @@ JSXReader.prototype = {
     var str = '', count = 0, entity;
 
     if(ch !== '&') {
-      reader.throwSyntaxError('JSX',
+      reader.throwSyntaxError('MSX',
                               'Entity must start with an ampersand',
                               reader.readToken());
     }
@@ -391,7 +391,7 @@ JSXReader.prototype = {
     var ch = reader.source[reader.index];
 
     if(!reader.isIdentifierStart(ch.charCodeAt(0))) {
-      throw new JSXBailError('bailed while reading element ' +
+      throw new MSXBailError('bailed while reading element ' +
                              'name: ' + ch);
     }
 
@@ -448,7 +448,7 @@ JSXReader.prototype = {
 
       if(quote !== '"' && quote !== "'") {
         reader.throwSyntaxError(
-          'JSX',
+          'MSX',
           'attributes should be an expression or quoted text',
           reader.readToken()
         );
@@ -458,7 +458,7 @@ JSXReader.prototype = {
       this.readText([quote]);
       if(quote !== reader.source[reader.index]) {
         reader.throwSyntaxError(
-          'JSX',
+          'MSX',
           'badly quoted string',
           reader.readToken()
         );
@@ -496,7 +496,7 @@ JSXReader.prototype = {
     var chCode = source[reader.index].charCodeAt(0);
 
     if(chCode === 92 || !reader.isIdentifierStart(chCode)) {
-      throw new JSXBailError('bailed while reading identifier: ' +
+      throw new MSXBailError('bailed while reading identifier: ' +
                              source[reader.index]);
     }
 
@@ -777,144 +777,9 @@ var XHTMLEntities = {
   diams: '\u2666'
 };
 
-var JSXTAGS = {
-  a: true,
-  abbr: true,
-  address: true,
-  applet: true,
-  area: true,
-  article: true,
-  aside: true,
-  audio: true,
-  b: true,
-  base: true,
-  bdi: true,
-  bdo: true,
-  big: true,
-  blockquote: true,
-  body: true,
-  br: true,
-  button: true,
-  canvas: true,
-  caption: true,
-  circle: true,
-  cite: true,
-  code: true,
-  col: true,
-  colgroup: true,
-  command: true,
-  data: true,
-  datalist: true,
-  dd: true,
-  defs: true,
-  del: true,
-  details: true,
-  dfn: true,
-  dialog: true,
-  div: true,
-  dl: true,
-  dt: true,
-  ellipse: true,
-  em: true,
-  embed: true,
-  fieldset: true,
-  figcaption: true,
-  figure: true,
-  footer: true,
-  form: true,
-  g: true,
-  h1: true,
-  h2: true,
-  h3: true,
-  h4: true,
-  h5: true,
-  h6: true,
-  head: true,
-  header: true,
-  hgroup: true,
-  hr: true,
-  html: true,
-  i: true,
-  iframe: true,
-  img: true,
-  input: true,
-  ins: true,
-  kbd: true,
-  keygen: true,
-  label: true,
-  legend: true,
-  li: true,
-  line: true,
-  linearGradient: true,
-  link: true,
-  main: true,
-  map: true,
-  mark: true,
-  marquee: true,
-  mask: false,
-  menu: true,
-  menuitem: true,
-  meta: true,
-  meter: true,
-  nav: true,
-  noscript: true,
-  object: true,
-  ol: true,
-  optgroup: true,
-  option: true,
-  output: true,
-  p: true,
-  param: true,
-  path: true,
-  pattern: false,
-  polygon: true,
-  polyline: true,
-  pre: true,
-  progress: true,
-  q: true,
-  radialGradient: true,
-  rect: true,
-  rp: true,
-  rt: true,
-  ruby: true,
-  s: true,
-  samp: true,
-  script: true,
-  section: true,
-  select: true,
-  small: true,
-  source: true,
-  span: true,
-  stop: true,
-  strong: true,
-  style: true,
-  sub: true,
-  summary: true,
-  sup: true,
-  svg: true,
-  table: true,
-  tbody: true,
-  td: true,
-  text: true,
-  textarea: true,
-  tfoot: true,
-  th: true,
-  thead: true,
-  time: true,
-  title: true,
-  tr: true,
-  track: true,
-  tspan: true,
-  u: true,
-  ul: true,
-  'var': true,
-  video: true,
-  wbr: true
-};
-
 module.exports = sweet.currentReadtable().extend({
   '<': function (ch, reader) {
-    var reader = new JSXReader(reader);
+    var reader = new MSXReader(reader);
     reader.read();
     var toks = reader.buffer.finish();
     return toks.length ? toks : null;

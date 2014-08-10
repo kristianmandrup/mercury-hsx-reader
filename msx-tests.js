@@ -14,29 +14,27 @@ var tests = [
   '<div>@test content</div>',
   '<div><br />7x invalid-js-identifier</div>',
   '<a.b></a.b>',
-  '<a.b.c></a.b.c>',
-  '(<div />) < x'
+  '<a.b.c></a.b.c>'
 ];
 
 var results = [
-  'React.DOM.a(null)',
-  'React.DOM.a({ v: true })',
-  "React.DOM.a({ foo: 'bar' }, ' ', value, ' ', React.DOM.b(null, c(null)))",
-  "React.DOM.a({ b: ' ', c: ' ', d: '&'})",
-  'React.DOM.a(null)',
-  "AbC-def({\n  test: '&&' }, \n'bar' + ' ' +\n 'baz'\n)",
-  'React.DOM.a({ b: x ? c(null) : d(null) })',
-  'React.DOM.a(null)',
-  "React.DOM.div(null, '@test content')",
-  "React.DOM.div(null, React.DOM.br(null), '7x invalid-js-identifier')",
-  'a.b(null)',
-  'a.b.c(null)',
-  'React.DOM.div(null) < x'
+  "m('a', null)",
+  "m('a', { v: true })",
+  "m('a', { foo: 'bar' }, [ ' ', value, ' ', m('b', null, [m('c', null)])])",
+  "m('a', { b: ' ', c: ' ', d: '&'})",
+  "m('a', null)",
+  "m('AbC-def', { test: '&&' }, ['bar' + ' ' + 'baz'])",
+  "m('a', { b: x ? m('c', null) : m('d', null) })",
+  "m('a', null)",
+  "m('div', null, ['@test content'])",
+  "m('div', null, [ m('br', null), '7x invalid-js-identifier'])",
+  "m('a.b', null)",
+  "m('a.b.c', null)"
 ];
 
 tests.forEach(function(test, i) {
   var code = sweet.compile(test).code;
-  
+
   code = code.trim()
     .replace(/;$/, '')
     .replace(/\n/g, '')

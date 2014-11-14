@@ -17,5 +17,8 @@
   }],
   "bugs": {
     "url": "https://github.com/sdemjanenko/msx-reader/issues"
+  },
+  "devDependencies": {
+    "sweet.js": "x"
   }
 }

@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Mercury-hsx-reader by kristianmandrup</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Mercury-hsx-reader</h1>
+        <p>A MSX reader for JavaScript, powered by sweet.js.</p>
+        <p class="view"><a href="https://github.com/kristianmandrup/mercury-hsx-reader">View the Project on GitHub <small>kristianmandrup/mercury-hsx-reader</small></a></p>
+        <ul>
+          <li><a href="https://github.com/kristianmandrup/mercury-hsx-reader/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/kristianmandrup/mercury-hsx-reader/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/kristianmandrup/mercury-hsx-reader">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h3>
+<a id="welcome-to-mercury-hsx-reader" class="anchor" href="#welcome-to-mercury-hsx-reader" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to Mercury HSX Reader</h3>
+
+<p>Compile your templates into Mercury compatible HSX virtual DOM DSL</p>
+
+<div class="highlight highlight-html"><pre>  &lt;<span class="pl-ent">:MyCool</span> /&gt;
+  &lt;<span class="pl-ent">SideBySideEditor</span> /&gt;
+  &lt;<span class="pl-ent">MyEditor</span> <span class="pl-e">state</span>=<span class="pl-s1"><span class="pl-pds">"</span>sideBySideEditor<span class="pl-pds">"</span></span>/&gt;
+
+  &lt;<span class="pl-ent">div</span>&gt;
+    &lt;<span class="pl-ent">:SideBySideEditor</span> /&gt;
+  &lt;/<span class="pl-ent">div</span>&gt;
+
+  &lt;<span class="pl-ent">header</span>&gt;
+    &lt;<span class="pl-ent">section</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>main<span class="pl-pds">"</span></span>&gt;
+      &lt;<span class="pl-ent">h2</span>&gt;my title&lt;/<span class="pl-ent">h2</span>&gt;
+      &lt;<span class="pl-ent">p</span>&gt;some text here&lt;/<span class="pl-ent">p</span>&gt;
+    &lt;<span class="pl-ent">section</span>&gt;
+  &lt;/<span class="pl-ent">header</span>&gt;</pre></div>
+
+<p>When compiled the markup is turned into mercury compatible (nested) <code>h</code> calls which creates a virtual dom.</p>
+
+<div class="highlight highlight-js"><pre><span class="pl-v">this</span>.renderComponent(<span class="pl-s1"><span class="pl-pds">'</span>MyCool<span class="pl-pds">'</span></span>, <span class="pl-c1">null</span>)
+<span class="pl-v">this</span>.renderComponent(<span class="pl-s1"><span class="pl-pds">'</span>SideBySideEditor<span class="pl-pds">'</span></span>, <span class="pl-c1">null</span>)
+<span class="pl-v">this</span>.renderComponent(<span class="pl-s1"><span class="pl-pds">'</span>MyEditor<span class="pl-pds">'</span></span>, { state<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>sideBySideEditor<span class="pl-pds">'</span></span> })
+h(<span class="pl-s1"><span class="pl-pds">'</span>div<span class="pl-pds">'</span></span>, <span class="pl-c1">null</span>, [<span class="pl-v">this</span>.renderComponent(<span class="pl-s1"><span class="pl-pds">'</span>SideBySideEditor<span class="pl-pds">'</span></span>, <span class="pl-c1">null</span>)])
+
+h(<span class="pl-s1"><span class="pl-pds">'</span>header<span class="pl-pds">'</span></span>, <span class="pl-c1">null</span>, 
+  [h(<span class="pl-s1"><span class="pl-pds">'</span>section<span class="pl-pds">'</span></span>, { name<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>main<span class="pl-pds">'</span></span> }, 
+    [h(<span class="pl-s1"><span class="pl-pds">'</span>h2<span class="pl-pds">'</span></span>, <span class="pl-c1">null</span>, 
+       [<span class="pl-s1"><span class="pl-pds">'</span>my title<span class="pl-pds">'</span></span>]), 
+     h(<span class="pl-s1"><span class="pl-pds">'</span>p<span class="pl-pds">'</span></span>, <span class="pl-c1">null</span>, 
+       [<span class="pl-s1"><span class="pl-pds">'</span>some text here<span class="pl-pds">'</span></span>]) 
+    ])
+   ]
+)</pre></div>
+
+<p>Notice that currently, your render context is expected to contain a function <code>renderComponent</code> which is called with arguments that identify the component and arguments. It then has the responsibility to find the component and call it as per your conventions.</p>
+
+<p>To mark a tag as a component call, either:</p>
+
+<ul>
+<li>prefix its name with a <code>:</code> </li>
+<li>capitalize the tag name</li>
+</ul>
+
+<p>Examples: <code>&lt;MyEditor state="sideBySideEditor"/&gt;</code> and <code>&lt;:SideBySideEditor /&gt;</code></p>
+
+<h3>
+<a id="running-tests" class="anchor" href="#running-tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running tests</h3>
+
+<p><code>node hsx-tests.js</code></p>
+
+<h3>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h3>
+
+<p>Enjoy :)</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/kristianmandrup">kristianmandrup</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>

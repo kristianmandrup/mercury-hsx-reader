@@ -13,7 +13,7 @@ macro _appendDisplayName {
       values.unshift(makeValue(unwrapSyntax(#{$id}), #{$ctx}));
     }
 
-    // Keep the same hygienge
+    // Keep the same hygiene
     letstx $react = [makeIdent('React', #{$ctx})],
     $names ... = names,
     $values ... = values;

@@ -1,4 +1,3 @@
-
 // TODO: https://github.com/facebook/react/commit/e6134c307e2bb7765aaa747eb5d2136fc18abbd7
 
 var sweet = require('sweet.js');
@@ -151,6 +150,7 @@ MSXReader.prototype = {
         reader.makeDelimiter('{}', innerTokens)
     ];
 
+    // console.log('innerTokens', innerTokens);
     // Invoke our helper macro
     var expanded = sweet.expandSyntax(tokens, [helperMacro])
     this.buffer.add(expanded);
@@ -159,6 +159,11 @@ MSXReader.prototype = {
   readElement: function() {
     function tokReduce(acc, tok) {
       return acc + tok.value;
+    }
+
+    function isComponent(name) {
+      var firstChar = name[0];
+      return firstChar === firstChar.toUpperCase();
     }
 
     var reader = this.reader;
@@ -172,13 +177,19 @@ MSXReader.prototype = {
     var openingName = openingNameToks.slice(0, -1)
         .reduce(tokReduce, '');
 
-    // Prefix the name with React.DOM if necessary
-    // if(JSXTAGS[openingName]) {
-    //   openingNameToks.unshift(reader.makePunctuator('.'));
-    //   openingNameToks.unshift(reader.makeIdentifier('DOM'));
-    //   openingNameToks.unshift(reader.makePunctuator('.'));
-    //   openingNameToks.unshift(reader.makeIdentifier('React'));
-    // }
+    // If the tag name is capitalized, treat it as a component call ;)
+    // identify it as component by prefixing with ':'
+    // can be picked up by simple macro rule like this:
+
+    //    rule { { : $el $attrs } } => {
+    //      $el.render(state.$el)
+    //    }
+
+    if(isComponent(openingName)) {
+      if (openingNameToks[0].value !== ':') {
+        openingNameToks.unshift(reader.makePunctuator(':'));
+      }
+    }
 
     this.buffer.add(openingNameToks);
 
@@ -390,7 +401,16 @@ MSXReader.prototype = {
     var reader = this.reader;
     var ch = reader.source[reader.index];
 
-    if(!reader.isIdentifierStart(ch.charCodeAt(0))) {
+    var firstChar = ch.charCodeAt(0);
+
+    if (reader.isIn(firstChar, [':'.charCodeAt(0)])) {
+      this.readPunc();
+      ch = reader.source[reader.index +1];
+    }
+
+    var firstChar = ch.charCodeAt(0);
+
+    if(!reader.isIdentifierStart(firstChar)) {
       throw new MSXBailError('bailed while reading element ' +
                              'name: ' + ch);
     }

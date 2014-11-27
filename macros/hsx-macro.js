@@ -1,4 +1,3 @@
-
 let _DOM = macro {
   rule { { $a . $b $expr ... } } => {
     _DOM_member { $a . $b $expr ... }
@@ -6,6 +5,10 @@ let _DOM = macro {
 
   rule { { $el $attrs } } => {
     h(str_expr($el), $attrs)
+  }
+
+  rule { { : $el:ident  $attrs } } => {
+    this.renderComponent(str_expr($el), $attrs)
   }
 
   rule { { $el $attrs , } } => {
@@ -16,17 +19,8 @@ let _DOM = macro {
     h(str_expr($elStart), $attrs, [$children (,) ...])
   }
 
-//  rule { { :$elStart $attrs $($children:expr,) ... } } => {
-//    $elStart.render(state.$attrs[state]), [$children (,) ...]
-//  }
-
-  rule { { $($elStart:) $($children:expr,) ... } } => {
-    $elStart.render(state.$elStart), [$children (,) ...]
-  }
-
   rule { } => { _DOM }
 }
-
 macro _DOM_member {
   rule { { $a . $b $expr ... } } => {
     _DOM_member { ($a . $b) $expr ... }

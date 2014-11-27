@@ -8,15 +8,17 @@ var tests = [
   '<a foo="bar"> {value} <b><c /></b></a>',
   '<a b={" "} c=" " d="&amp;" />',
   '<a\n/>',
-  '<AbC-def\n  test="&#x0026;&#38;">\nbar\nbaz\n</AbC-def>',
+  '<abC-def\n  test="&#x0026;&#38;">\nbar\nbaz\n</abC-def>',
   '<a b={x ? <c /> : <d />} />',
   '<a>{}</a>',
   '<div>@test content</div>',
   '<div><br />7x invalid-js-identifier</div>',
   '<a.b></a.b>',
   '<a.b.c></a.b.c>',
-  '<:sideBySideEditor/>'
-  // '<div><:sideBySideMdEditor state="sideBySideEditor"/></div>'
+  '<:MyCool />',
+  '<SideBySideEditor />',
+  '<MyEditor state="sideBySideEditor"/>',
+  '<div><:SideBySideEditor /></div>'
 ];
 
 var results = [
@@ -25,15 +27,17 @@ var results = [
   "h('a', { foo: 'bar' }, [ ' ', value, ' ', h('b', null, [h('c', null)])])",
   "h('a', { b: ' ', c: ' ', d: '&'})",
   "h('a', null)",
-  "h('AbC-def', { test: '&&' }, ['bar' + ' ' + 'baz'])",
+  "h('abC-def', { test: '&&' }, ['bar' + ' ' + 'baz'])",
   "h('a', { b: x ? h('c', null) : h('d', null) })",
   "h('a', null)",
   "h('div', null, ['@test content'])",
   "h('div', null, [ h('br', null), '7x invalid-js-identifier'])",
   "h('a.b', null)",
   "h('a.b.c', null)",
-  "sideBySideEditor.render(state.sideBySideEditor)"
-  // "h('div', sideBySideMdEditor.render(state.sideBySideEditor))",
+  "this.renderComponent('MyCool', null)",
+  "this.renderComponent('SideBySideEditor', null)",
+  "this.renderComponent('MyEditor', { state: 'sideBySideEditor' })",
+  "h('div', null, [this.renderComponent('SideBySideEditor', null)])",
 ];
 
 tests.forEach(function(test, i) {

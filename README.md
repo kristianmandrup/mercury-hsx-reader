@@ -1,10 +1,11 @@
+# Mercury hsx reader
 
-# msx-reader
-
-A reader to hook in MSX syntax to JavaScript, using
+A reader to hook in HSX syntax to JavaScript, using
 [sweet.js](http://sweetjs.org/). Why? Because now you can use any
-other language extensions (macros) with MSX. All you have to do is
-integrate sweet.js in your pipeline and you can have everything,
+other language extensions (macros) with HSX.
+
+All you have to do is
+integrate [sweet.js](https://github.com/mozilla/sweet.js) in your pipeline and you can have everything,
 including *working* sourcemaps and nice errors across all things.
 
 **This is beta**. There are likely small bugs and edge cases to be
@@ -13,15 +14,15 @@ fixed. That said, it should be relatively stable.
 ```
 <div>
   Monkeys:
-  {listOfMonkeys} {scratchesAss}
+  {listOfMonkeys} {climbingTrees}
 </div>
 ```
 
 ```
-m('div', null, ['Monkeys:', listOfMonkeys, ' ', scratchesAss]);
+h('div', null, ['Monkeys:', listOfMonkeys, ' ', climbingTrees]);
 ```
 
-Or
+On parsing error:
 
 ```
 <div>
@@ -31,11 +32,12 @@ Or
 ```
 
 ```
-SyntaxError: [MSX] Expected correspoding closing tag for p
+SyntaxError: [MSX] Expected corresponding closing tag for p
 5: </div>
      ^
-    at Object.readtables.parserAccessor.throwSyntaxError (/Users/sdemjanenko/Code/msx-
-reader/node_modules/sweet.js/lib/parser.js:4947:23)
-    at Object.MSXReader.readElement (/Users/sdemjanenko/Code/msx-reader/msx-reader.js:
-223:21)
+    at Object.readtables.parserAccessor.throwSyntaxError ...
 ```
+
+### Running tests
+
+`node hsx-tests.js`

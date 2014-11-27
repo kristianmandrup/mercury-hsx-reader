@@ -403,7 +403,7 @@ MSXReader.prototype = {
 
     var firstChar = ch.charCodeAt(0);
 
-    if (reader.isIn(firstChar, [':'.charCodeAt(0)])) {
+    if (reader.isIn(String.fromCharCode(firstChar), ':')) {
       this.readPunc();
       ch = reader.source[reader.index +1];
     }

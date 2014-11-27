@@ -18,7 +18,8 @@ var tests = [
   '<:MyCool />',
   '<SideBySideEditor />',
   '<MyEditor state="sideBySideEditor"/>',
-  '<div><:SideBySideEditor /></div>'
+  '<div><:SideBySideEditor /></div>',
+  '<header><section name="main"><h2>my title</h2><p>some text here</p></section></header>'
 ];
 
 var results = [
@@ -38,6 +39,7 @@ var results = [
   "this.renderComponent('SideBySideEditor', null)",
   "this.renderComponent('MyEditor', { state: 'sideBySideEditor' })",
   "h('div', null, [this.renderComponent('SideBySideEditor', null)])",
+  "h('header', null, [h('section', { name: 'main' }, [ h('h2', null, ['my title']), h('p', null, ['some text here']) ])])"
 ];
 
 tests.forEach(function(test, i) {

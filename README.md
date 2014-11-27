@@ -16,10 +16,27 @@ fixed. That said, it should be relatively stable.
   Monkeys:
   {listOfMonkeys} {climbingTrees}
 </div>
+<MyEditor state="sideBySideEditor"/>
+<header>
+  <section name="main">
+    <h2>my title</h2>
+    <p>some text here</p>
+  <section>
+</header>
 ```
 
 ```
 h('div', null, ['Monkeys:', listOfMonkeys, ' ', climbingTrees]);
+this.renderComponent('MyEditor', { state: 'sideBySideEditor' })
+h('header', null,
+  [h('section', { name: 'main' },
+    [h('h2', null,
+       ['my title']),
+     h('p', null,
+       ['some text here'])
+    ])
+   ]
+)
 ```
 
 On parsing error:
@@ -32,7 +49,7 @@ On parsing error:
 ```
 
 ```
-SyntaxError: [MSX] Expected corresponding closing tag for p
+SyntaxError: [HSX] Expected corresponding closing tag for p
 5: </div>
      ^
     at Object.readtables.parserAccessor.throwSyntaxError ...
@@ -41,3 +58,7 @@ SyntaxError: [MSX] Expected corresponding closing tag for p
 ### Running tests
 
 `node hsx-tests.js`
+
+### License
+
+Keep calm and *ENJOY* ;)

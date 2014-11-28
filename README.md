@@ -33,7 +33,7 @@ fixed. That said, it should be relatively stable.
 
 Outputs the following JavaScript:
 
-```
+```js
 h('div', null, ['Monkeys:', listOfMonkeys, ' ', climbingTrees]);
 this.renderComponent('MyCool');
 this.renderWidget('MyWidget');

@@ -1,13 +1,14 @@
 // TODO: https://github.com/facebook/react/commit/e6134c307e2bb7765aaa747eb5d2136fc18abbd7
 
 var sweet = require('sweet.js');
-var helperMacro = sweet.loadNodeModule(__dirname, './macros/hsx-macro.js');
 
-// sweet.loadMacro(__dirname + '/macros/display-name.js');
+var defaultMacroPath  = './macros/hsx-macro.sjs';
+var macroPath         = process.env.hsxMacroPath || defaultMacroPath;
+var helperMacro       = sweet.loadMacro(macroPath);
 
 // Error handling
 
-function MSXBailError(message) {
+function HSXBailError(message) {
   this.message = message;
 }
 
@@ -45,7 +46,7 @@ TokenBuffer.prototype = {
   expect: function(ch) {
     var reader = this.reader;
     if(reader.index >= reader.length) {
-      throw new MSXBailError('bailed since end of file found');
+      throw new HSXBailError('bailed since end of file found');
     }
 
     var punc = reader.getQueued();
@@ -113,12 +114,12 @@ TokenBuffer.prototype = {
   }
 };
 
-function MSXReader(reader) {
+function HSXReader(reader) {
   this.reader = reader;
   this.buffer = new TokenBuffer(reader);
 }
 
-MSXReader.prototype = {
+HSXReader.prototype = {
   expect: function() {
     return this.buffer.expect.apply(this.buffer, arguments);
   },
@@ -138,7 +139,7 @@ MSXReader.prototype = {
       }.bind(this));
     }
     catch(e) {
-      if(!(e instanceof MSXBailError)) {
+      if(!(e instanceof HSXBailError)) {
         throw e;
       }
       this.buffer.reset();
@@ -214,7 +215,7 @@ MSXReader.prototype = {
 
       if(openingName !== closingName) {
         this.reader.throwSyntaxError(
-          'MSX',
+          'HSX',
           'Expected corresponding closing tag for ' + openingName,
           closingNameToks[0]
         )
@@ -270,7 +271,7 @@ MSXReader.prototype = {
     this.expect('<');
 
     if(reader.suppressReadError(reader.readRegExp)) {
-      throw new MSXBailError('bailed because regexp found ' +
+      throw new HSXBailError('bailed because regexp found ' +
                              'at closing element');
     }
 
@@ -371,7 +372,7 @@ MSXReader.prototype = {
     var str = '', count = 0, entity;
 
     if(ch !== '&') {
-      reader.throwSyntaxError('MSX',
+      reader.throwSyntaxError('HSX',
                               'Entity must start with an ampersand',
                               reader.readToken());
     }
@@ -414,7 +415,7 @@ MSXReader.prototype = {
     var firstChar = ch.charCodeAt(0);
 
     if(!reader.isIdentifierStart(firstChar)) {
-      throw new MSXBailError('bailed while reading element ' +
+      throw new HSXBailError('bailed while reading element ' +
                              'name: ' + ch);
     }
 
@@ -471,7 +472,7 @@ MSXReader.prototype = {
 
       if(quote !== '"' && quote !== "'") {
         reader.throwSyntaxError(
-          'MSX',
+          'HSX',
           'attributes should be an expression or quoted text',
           reader.readToken()
         );
@@ -481,7 +482,7 @@ MSXReader.prototype = {
       this.readText([quote]);
       if(quote !== reader.source[reader.index]) {
         reader.throwSyntaxError(
-          'MSX',
+          'HSX',
           'badly quoted string',
           reader.readToken()
         );
@@ -519,7 +520,7 @@ MSXReader.prototype = {
     var chCode = source[reader.index].charCodeAt(0);
 
     if(chCode === 92 || !reader.isIdentifierStart(chCode)) {
-      throw new MSXBailError('bailed while reading identifier: ' +
+      throw new HSXBailError('bailed while reading identifier: ' +
                              source[reader.index]);
     }
 
@@ -802,7 +803,7 @@ var XHTMLEntities = {
 
 module.exports = sweet.currentReadtable().extend({
   '<': function (ch, reader) {
-    var reader = new MSXReader(reader);
+    var reader = new HSXReader(reader);
     reader.read();
     var toks = reader.buffer.finish();
     return toks.length ? toks : null;

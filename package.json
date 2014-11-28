@@ -1,24 +1,24 @@
 {
-  "name": "msx-reader",
-  "description": "reader",
+  "name": "mercury-hsx-reader",
+  "description": "hsx reader for mercury.js",
   "version": "0.0.1",
-  "author": "Stephen Demjanenko <sdemjanenko@gmail.com>",
+  "author": "Kristian Mandrup <kmandrup@gmail.com>",
   "engines": {
     "node": "*"
   },
   "main": "index",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sdemjanenko/msx-reader.git"
+    "url": "https://github.com/kristianmandrup/mercury-hsx-reader.git"
   },
   "license": [{
     "type": "BSD",
-    "url": "https://github.com/sdemjanenko/msx-reader/blob/master/LICENSE"
+    "url": "https://github.com/kristianmandrup/mercury-hsx-reader/blob/master/LICENSE"
   }],
   "bugs": {
-    "url": "https://github.com/sdemjanenko/msx-reader/issues"
+    "url": "https://github.com/kristianmandrup/mercury-hsx-reader/issues"
   },
   "devDependencies": {
-    "sweet.js": "x"
+    "sweet.js": "kristianmandrup/sweet.js#master"
   }
 }

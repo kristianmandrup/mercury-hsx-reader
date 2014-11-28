@@ -186,8 +186,8 @@ MSXReader.prototype = {
     //    }
 
     if(isComponent(openingName)) {
-      if (openingNameToks[0].value !== ':') {
-        openingNameToks.unshift(reader.makePunctuator(':'));
+      if (openingNameToks[0].value !== ':' && openingNameToks[0].value !== '|') {
+        openingNameToks.unshift(reader.makePunctuator('%'));
       }
     }
 
@@ -404,6 +404,9 @@ MSXReader.prototype = {
     var firstChar = ch.charCodeAt(0);
 
     if (reader.isIn(String.fromCharCode(firstChar), ':')) {
+      this.readPunc();
+      ch = reader.source[reader.index +1];
+    } else if (reader.isIn(String.fromCharCode(firstChar), '|')) {
       this.readPunc();
       ch = reader.source[reader.index +1];
     }

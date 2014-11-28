@@ -16,10 +16,11 @@ var tests = [
   '<a.b></a.b>',
   '<a.b.c></a.b.c>',
   '<:MyCool />',
+  '<|MyWidget />',
   '<SideBySideEditor />',
   '<MyEditor state="sideBySideEditor"/>',
-  '<div><:SideBySideEditor /></div>',
-  '<header><section name="main"><h2>my title</h2><p>some text here</p></section></header>'
+  // '<div><:SideBySideEditor /></div>',
+  // '<header><section name="main"><h2>my title</h2><p>some text here</p></section></header>'
 ];
 
 var results = [
@@ -35,10 +36,11 @@ var results = [
   "h('div', null, [ h('br', null), '7x invalid-js-identifier'])",
   "h('a.b', null)",
   "h('a.b.c', null)",
-  "this.renderComponent('MyCool', null)",
-  "this.renderComponent('SideBySideEditor', null)",
-  "this.renderComponent('MyEditor', { state: 'sideBySideEditor' })",
-  "h('div', null, [this.renderComponent('SideBySideEditor', null)])",
+  "this.renderComponent('MyCool')",
+  "this.renderWidget('MyWidget')",
+  "this.renderPartial('SideBySideEditor')",
+  "this.renderPartial('MyEditor', { state: 'sideBySideEditor' })",
+  "h('div', null, [this.renderPartial('SideBySideEditor')])",
   "h('header', null, [h('section', { name: 'main' }, [ h('h2', null, ['my title']), h('p', null, ['some text here']) ])])"
 ];
 

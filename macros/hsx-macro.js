@@ -7,8 +7,28 @@ let _DOM = macro {
     h(str_expr($el), $attrs)
   }
 
+  rule { { : $el:ident null } } => {
+    this.renderComponent(str_expr($el))
+  }
+
   rule { { : $el:ident  $attrs } } => {
     this.renderComponent(str_expr($el), $attrs)
+  }
+
+  rule { { % $el:ident null } } => {
+    this.renderPartial(str_expr($el))
+  }
+
+  rule { { % $el:ident  $attrs } } => {
+    this.renderPartial(str_expr($el), $attrs)
+  }
+
+  rule { { | $el:ident null } } => {
+    this.renderWidget(str_expr($el))
+  }
+
+  rule { { | $el:ident  $attrs } } => {
+    this.renderWidget(str_expr($el), $attrs)
   }
 
   rule { { $el $attrs , } } => {
